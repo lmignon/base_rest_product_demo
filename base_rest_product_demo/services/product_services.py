@@ -9,9 +9,8 @@ class ProductService(Component):
     _usage = "product"
     _collection = "base.rest.public.services"
     _description = """
-Product Services
-
-A set of services to manage products from external systems
+        Product Services
+        A set of services to manage products from external systems
     """
 
     def get(self, _id):
@@ -22,7 +21,7 @@ A set of services to manage products from external systems
 
     def search(self, name=None, product_type=None):
         """
-        Searh product by name and product_type
+        Search product by name and product_type
         """
         domain = []
         if name:
@@ -63,7 +62,7 @@ A set of services to manage products from external systems
     def archive(self, _id, **params):
         """
         Archive the given product. This method is an empty method, IOW it
-        don't update the product. This method is part of the demo data to
+        don't update the product. This method is part of the demo to
         illustrate that historically it's not mandatory to defined a schema
         describing the content of the response returned by a method.
         This kind of definition is DEPRECATED and will no more supported in
@@ -90,50 +89,47 @@ A set of services to manage products from external systems
         return vals
 
     # Validator
+    def _validator_get(self):
+        return {}
+
     def _validator_return_get(self):
-        res = self._validator_create()
-        res.update(
-            {
-                "id": {"type": "integer", "required": True, "empty": False},
-                "name": {"type": "string", "required": True, "empty": False},
-                "price": {"type": "float", "required": True, "empty": False},
-                "product_type": {
-                    "type": "string",
-                    "required": True,
-                    "allowed": ["consu", "service"],
-                },
-                "reference": {
-                    "type": "string",
-                    "required": False,
-                    "empty": True,
-                },
-                "attributes": {
-                    "type": "list",
-                    "required": False,
-                    "nullable": True,
+        res = {
+            "id": {"type": "integer", "required": True, "empty": False},
+            "name": {"type": "string", "required": True, "empty": False},
+            "price": {"type": "float", "required": True, "empty": False},
+            "product_type": {
+                "type": "string",
+                "required": True,
+                "allowed": ["consu", "service"],
+            },
+            "reference": {"type": "string", "required": False, "empty": True},
+            "attributes": {
+                "type": "list",
+                "required": False,
+                "nullable": True,
+                "schema": {
+                    "type": "dict",
                     "schema": {
-                        "type": "dict",
-                        "schema": {
-                            "name": {
-                                "type": "string",
-                                "required": True,
-                                "empty": False,
-                            },
-                            "value": {
-                                "type": "string",
-                                "required": True,
-                                "empty": False,
-                            },
-                            "extra_price": {
-                                "type": "float",
-                                "required": False,
-                                "empty": True,
-                            },
+                        "name": {
+                            "type": "string",
+                            "required": True,
+                            "empty": False,
+                        },
+                        "value": {
+                            "type": "string",
+                            "required": True,
+                            "empty": False,
+                        },
+                        "extra_price": {
+                            "type": "float",
+                            "required": False,
+                            "empty": True,
                         },
                     },
                 },
-            }
-        )
+            },
+        }
+
         return res
 
     def _validator_search(self):
